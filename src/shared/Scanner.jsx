@@ -1,14 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
-// Lazy import to avoid breaking if camera APIs are not allowed
-let BrowserMultiFormatReader
-try {
-  // dynamic import so the app loads even if missing
-  // eslint-disable-next-line no-undef
-  BrowserMultiFormatReader = (await import('@zxing/browser')).BrowserMultiFormatReader
-} catch (e) {
-  // ignore
-}
+// NOTE: Do NOT use top-level await here because some build targets don't support it.
+// We'll dynamically import inside start() when needed.
 
 export default function Scanner({ onDetected, compact = false }) {
   const videoRef = useRef(null)
@@ -24,12 +17,10 @@ export default function Scanner({ onDetected, compact = false }) {
   }, [])
 
   const start = async () => {
-    if (!BrowserMultiFormatReader) {
-      setError('Scanner no disponible (falta dependencia o permisos)')
-      return
-    }
     try {
       setError('')
+      // Dynamically import inside function scope to avoid top-level await
+      const { BrowserMultiFormatReader } = await import('@zxing/browser')
       readerRef.current = new BrowserMultiFormatReader()
       const devices = await BrowserMultiFormatReader.listVideoInputDevices()
       const deviceId = devices?.[0]?.deviceId
