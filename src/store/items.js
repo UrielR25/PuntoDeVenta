@@ -20,8 +20,9 @@ export function saveItem({ barcode, name, price }) {
     barcode,
     name,
     price,
-    cantidad: prev.cantidad ?? 0,
-    precioMayoreo: prev.precioMayoreo ?? null,
+    stock: prev.stock ?? 0,
+    wholesalePrice: prev.wholesalePrice ?? null,
+    purchasePrice: prev.purchasePrice ?? null,
     ...prev,
     // Incoming values should override previous ones if provided
     ...(name !== undefined ? { name } : {}),
@@ -44,8 +45,10 @@ export function upsertItem(fields) {
   const map = readAll()
   const prev = map[fields.barcode] || {}
   map[fields.barcode] = {
-    cantidad: 0,
-    precioMayoreo: null,
+    stock: 0,
+    wholesalePrice: null,
+    purchasePrice: null,
+    department: 'Abarrotes',
     ...prev,
     ...fields,
   }

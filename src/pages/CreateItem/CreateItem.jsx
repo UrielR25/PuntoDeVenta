@@ -2,7 +2,7 @@ import Scanner from '../../shared/Scanner'
 import CreateItemLogic from './CreateItem.logic'
 
 export default function CreateItem() {
-  const {handleSubmit, handleCheck, barcode, setBarcode, name, setName, price, setPrice, cantidad, setCantidad, precioMayoreo, setPrecioMayoreo, message, setMessage} = CreateItemLogic()
+  const {handleSubmit, handleCheck, barcode, setBarcode, name, setName, price, setPrice, stock, setStock, wholesalePrice, setWholesalePrice, purchasePrice, setPurchasePrice, department, setDepartment, message, setMessage} = CreateItemLogic()
 
   return (
     <section>
@@ -48,12 +48,24 @@ export default function CreateItem() {
 
 
             <label className="md3-field">
+             <span className="label">Precio de compra (opcional)</span>
+                <input
+                  type="number"
+                  step="0.01"
+                  value={purchasePrice}
+                  onChange={(e) => setPurchasePrice(e.target.value)}
+                  placeholder="0.00"
+                />
+            </label>
+
+
+            <label className="md3-field">
              <span className="label">Precio mayoreo (opcional)</span>
                 <input
                   type="number"
                   step="0.01"
-                  value={precioMayoreo}
-                  onChange={(e) => setPrecioMayoreo(e.target.value)}
+                  value={wholesalePrice}
+                  onChange={(e) => setWholesalePrice(e.target.value)}
                   placeholder="0.00"
                 />
             </label>
@@ -64,10 +76,30 @@ export default function CreateItem() {
                 type="number"
                 step="1"
                 min="0"
-                value={cantidad}
-                onChange={(e) => setCantidad(e.target.value)}
+                value={stock}
+                onChange={(e) => setStock(e.target.value)}
                 placeholder="0"
               />
+            </label>
+
+            <label className="md3-field">
+              <span className="label">Departamento</span>
+              <select
+                value={department}
+                onChange={(e) => setDepartment(e.target.value)}
+              >
+                <option value="Abarrotes">Abarrotes</option>
+                <option value="Lácteos">Lácteos</option>
+                <option value="Carnes y Pescados">Carnes y Pescados</option>
+                <option value="Frutas y Verduras">Frutas y Verduras</option>
+                <option value="Panadería">Panadería</option>
+                <option value="Bebidas">Bebidas</option>
+                <option value="Limpieza">Limpieza</option>
+                <option value="Cuidado Personal">Cuidado Personal</option>
+                <option value="Congelados">Congelados</option>
+                <option value="Botanas y Dulces">Botanas y Dulces</option>
+                <option value="Otros">Otros</option>
+              </select>
             </label>
           </div>
           
@@ -78,7 +110,7 @@ export default function CreateItem() {
 
         <div className="form-actions">
           <button type="submit" className="filled">Guardar</button>
-          <button type="button" className="outlined" onClick={() => { setBarcode(''); setName(''); setPrice(''); setCantidad(''); setPrecioMayoreo(''); setMessage('Formulario limpio') }}>Limpiar</button>
+          <button type="button" className="outlined" onClick={() => { setBarcode(''); setName(''); setPrice(''); setStock(''); setWholesalePrice(''); setPurchasePrice(''); setDepartment('Abarrotes'); setMessage('Formulario limpio') }}>Limpiar</button>
         </div>
       </form>
       {message && <p className="message">{message}</p>}

@@ -5,8 +5,10 @@ const CreateItemLogic = () => {
  const [barcode, setBarcode] = useState('')
    const [name, setName] = useState('')
    const [price, setPrice] = useState('')
-   const [cantidad, setCantidad] = useState('')
-   const [precioMayoreo, setPrecioMayoreo] = useState('')
+   const [stock, setStock] = useState('')
+   const [wholesalePrice, setWholesalePrice] = useState('')
+   const [purchasePrice, setPurchasePrice] = useState('')
+   const [department, setDepartment] = useState('Abarrotes')
    const [message, setMessage] = useState('')
  
    const handleSubmit = (e) => {
@@ -20,24 +22,31 @@ const CreateItemLogic = () => {
        setMessage('El precio debe ser un número')
        return
      }
-     const parsedCantidad = cantidad === '' ? 0 : Number(cantidad)
-     if (Number.isNaN(parsedCantidad) || parsedCantidad < 0) {
+     const parsedStock = stock === '' ? 0 : Number(stock)
+     if (Number.isNaN(parsedStock) || parsedStock < 0) {
        setMessage('La cantidad debe ser un número mayor o igual a 0')
        return
      }
-     const parsedMayoreo = precioMayoreo === '' ? null : Number(precioMayoreo)
-     if (precioMayoreo !== '' && Number.isNaN(parsedMayoreo)) {
+     const parsedWholesalePrice = wholesalePrice === '' ? null : Number(wholesalePrice)
+     if (wholesalePrice !== '' && Number.isNaN(parsedWholesalePrice)) {
        setMessage('El precio de mayoreo debe ser un número')
        return
      }
+     const parsedPurchasePrice = purchasePrice === '' ? null : Number(purchasePrice)
+     if (purchasePrice !== '' && Number.isNaN(parsedPurchasePrice)) {
+       setMessage('El precio de compra debe ser un número')
+       return
+     }
  
-     upsertItem({ barcode, name, price: parsedPrice, cantidad: parsedCantidad, precioMayoreo: parsedMayoreo })
+     upsertItem({ barcode, name, price: parsedPrice, stock: parsedStock, wholesalePrice: parsedWholesalePrice, purchasePrice: parsedPurchasePrice, department })
      setMessage('Artículo guardado')
      setBarcode('')
      setName('')
      setPrice('')
-     setCantidad('')
-     setPrecioMayoreo('')
+     setStock('')
+     setWholesalePrice('')
+     setPurchasePrice('')
+     setDepartment('Abarrotes')
    }
  
    const handleCheck = () => {
@@ -46,8 +55,10 @@ const CreateItemLogic = () => {
      if (item) {
        setName(item.name)
        setPrice(String(item.price))
-       setCantidad(String(item.cantidad ?? ''))
-       setPrecioMayoreo(item.precioMayoreo != null ? String(item.precioMayoreo) : '')
+       setStock(String(item.stock ?? ''))
+       setWholesalePrice(item.wholesalePrice != null ? String(item.wholesalePrice) : '')
+       setPurchasePrice(item.purchasePrice != null ? String(item.purchasePrice) : '')
+       setDepartment(item.department || 'Abarrotes')
        setMessage('Artículo encontrado y cargado')
      } else {
        setMessage('No existe un artículo con ese código')
@@ -64,10 +75,14 @@ const CreateItemLogic = () => {
     setName,
     price,
     setPrice,
-    cantidad,
-    setCantidad,
-    precioMayoreo,
-    setPrecioMayoreo,
+    stock,
+    setStock,
+    wholesalePrice,
+    setWholesalePrice,
+    purchasePrice,
+    setPurchasePrice,
+    department,
+    setDepartment,
     message,
     setMessage,
    }
